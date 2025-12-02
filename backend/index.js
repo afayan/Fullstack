@@ -1,7 +1,6 @@
-import express from 'express'
+import app from "./app.js";
+import db from "./database/database.js";
 
-const app = express()
-
-app.listen(2200, ()=>{
+app.listen( process.env.PORT || 2201, ()=>{
     console.log("App running");
 })
