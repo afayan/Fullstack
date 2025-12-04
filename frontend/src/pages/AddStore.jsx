@@ -5,7 +5,8 @@ function AddStore() {
   const [form, setForm] = useState({
     name: "",
     email: "",
-    address: ""
+    address: "",
+    password : ""
   });
 
   const [message, setMessage] = useState("");
@@ -37,7 +38,7 @@ function AddStore() {
       if (!res.ok) return;
 
       // Reset form after success
-      setForm({ name: "", email: "", address: "" });
+      setForm({ name: "", email: "", address: "", password: "" });
     } catch (error) {
       setMessage("Something went wrong");
     }
@@ -73,6 +74,16 @@ function AddStore() {
           name="address"
           placeholder="Store Address"
           value={form.address}
+          onChange={handleChange}
+          required
+          style={{ display: "block", marginBottom: "10px", width: "100%" }}
+        />
+
+      <input
+          type="password"
+          name="password"
+          placeholder="Store password"
+          value={form.password}
           onChange={handleChange}
           required
           style={{ display: "block", marginBottom: "10px", width: "100%" }}

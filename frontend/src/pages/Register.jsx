@@ -20,8 +20,18 @@ export default function Register() {
 
 
         if (!password || !email || !address || !name) {
-            return alert("Please fill all fields")
+            return alert("Please fill all fields");
         }
+
+        if (name.length < 20 || name.length > 60) {
+            return alert("Name must be between 20 and 60 characters");
+        }
+
+        if (address.length > 400) {
+            return alert("Address must not exceed 400 characters");
+        }
+
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=<>?{}[\]|/~]).{8,16}$/;
 
         console.log({
                     password,

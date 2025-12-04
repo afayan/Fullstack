@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 
-function Stores({ stores, setsidebarinfo, admin, userdata }) {
+function Stores({ stores, setsidebarinfo, admin, userdata, owner }) {
 
   const [showModal, setShowModal] = useState(false)
   const [selectedStore, setSelectedStore] = useState(null)
   const [rating, setRating] = useState(0)
+  const [average, setAverage] = useState(0)
 
   async function getRatings(storeid) {
     const response = await fetch('http://localhost:2200/getratings?storeid=' + storeid, {
@@ -16,6 +17,13 @@ function Stores({ stores, setsidebarinfo, admin, userdata }) {
 
     const data = await response.json();
     setsidebarinfo(data.result);
+
+    const average =
+    data.result.length > 0
+      ? (data.result.reduce((sum, r) => sum + r.rating, 0) / data.result.length).toFixed(2)
+      : 0;
+
+      setAverage(average)
   }
 
   function openRatingModal(storeid) {
@@ -83,13 +91,28 @@ function Stores({ stores, setsidebarinfo, admin, userdata }) {
             <button className='storebutton' onClick={() => getRatings(store.storeid)}>See ratings</button>
           )}
 
-          {!admin && (
+          {!admin && !owner && (
             <button className='storebutton' onClick={() => openRatingModal(store.storeid)}>Rate</button>
           )}
 
-          {!admin && (
-            <button className='storebutton' onClick={() => getmyratings(store.storeid)}>View My Ratings</button>
-          )}
+         
+        {!admin && !owner && (
+          <button className='storebutton' onClick={() => getmyratings(store.storeid)}>
+            View Store Ratings
+          </button>
+        )}
+
+
+{owner && (
+  <button className='storebutton' onClick={() => getRatings(store.storeid)}>
+    See Ratings
+  </button>
+)}
+
+
+{owner && average > 0 && (
+  <p>Average : {average}</p>
+)}
         </div>
       ))}
 

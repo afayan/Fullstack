@@ -17,11 +17,15 @@ const [sidebarinfo, setsidebarinfo] = useState([])
 const [unumber, setUnumber] = useState(0)
 const [snumber, setSNumber] = useState(0)
 const [rnumber, setRnumber] = useState(0)
+const [filterstores, setFilterStores] = useState([])
 const navigate = useNavigate()
 
 useEffect(()=>{
   getUsers(filter)
   getstores(filter)
+
+  console.log(userdata);
+  
 }, [filter, loading])
 
 
@@ -50,6 +54,7 @@ useEffect(()=>{
     console.log("stores",data);
      setStoresList(data.result)
      setSNumber(data.result.length)
+     setFilterStores(data.result.filter((store)=>store.email == userdata.email))
   }
 
   function logout() {
@@ -85,7 +90,7 @@ useEffect(()=>{
           </>
         )
     }
-      else if (!loading) {
+      else if (!loading && userdata && userdata.role == 'normal') {
         return (
           <div>
          <h1>Welcome {userdata.email}</h1>
@@ -102,6 +107,17 @@ useEffect(()=>{
           </div>
           </div>
         )
+    }
+    else if (!loading && userdata && userdata.role == 'store'){
+       return (<div>
+         <h1>Hello Store owner!</h1>
+
+            <button onClick={()=>navigate('/update')}>Change Password</button>
+
+        <button onClick={logout}>Logout</button>
+        <Stores stores={filterstores} setsidebarinfo={setsidebarinfo} owner={true} admin={false} userdata={userdata}/>
+        {sidebarinfo && <Sidebar sidebarinfo = {sidebarinfo}/>}
+        </div>)
     }
 
 }
