@@ -2,7 +2,7 @@ import db from "../database/database.js";
 
 export default function handleGetStores(req, res) {
 
-    let admin = true
+    let admin = req.user.role == 'admin'
     if (admin) {
         if (req.query.filter) {
             db.query("select s.storeid, s.address, s.name, ifnull(avg(r.rating), 0) as average from stores s left join ratings r using (storeid) where s.name like ? or s.address like ? or s.email like ? group by s.storeid;", ["%" + req.query.filter + "%", "%" + req.query.filter + "%", "%" + req.query.filter + "%"], (error, result)=>{

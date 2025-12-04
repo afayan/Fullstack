@@ -8,6 +8,6 @@ export default function handleUserReg(req, res) {
     const hash = bcrypt.hashSync(password, 10);
 
     db.query("insert into users( name, password, email, address, role) values (? , ?, ? , ?, ?);", [name, hash, email, address, role], (error, result)=>{
-        res.json({message : error ? error : result})
+        res.json({message : error ? error : "User added successfully"})
     })
 }
